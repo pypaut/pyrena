@@ -1,0 +1,10 @@
+
+[X] - JUMP
+[ ] - Dispatch between several files
+[ ] - COLLISION
+    [ ] - namespace Moveable
+        [ ] - class Character
+            [ ] - class Player(Character)
+            [ ] - class Enemy(Character)
+        [ ] - class Block
+    [ ] - class Hitbox(Rectangle)
