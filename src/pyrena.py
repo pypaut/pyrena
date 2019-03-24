@@ -74,6 +74,26 @@ class Character:
     x_size = 1 * TILESIZE
     y_size = 1 * TILESIZE
 
+    is_on_block = False
+
+    def collides(self, block):
+        return (block.x_pos - self.x_size < self.x_pos < block.x_pos + block.x_size
+        and block.y_pos - self.y_size < self.y_pos < block.y_pos + block.y_size)
+
+    def is_above(self, block):
+        """
+        Strictly above
+        """
+        return (block.y_pos - self.y_size < self.y_pos < block.y_pos + block.y_size
+        and self.x_pos <= block.x_pos)
+
+    def is_under(self, block):
+        """
+        Strictly under
+        """
+        return (block.y_pos - self.y_size < self.y_pos < block.y_pos + block.y_size
+        and block.x_pos + block.x_size <= self.x_pos)
+
 
 class Block:
     x_pos = 7 * TILESIZE
@@ -85,19 +105,6 @@ class Block:
 
 char = Character()
 block = Block()
-
-#####################
-##### COLLISION #####
-#####################
-
-def collides_hor(char, block):
-    return (block.x_pos - char.x_size < char.x_pos < block.x_pos + block.x_size
-    and block.y_pos < char.y_pos < block.y_pos + block.y_size)
-
-
-def collides_vert(char, block):
-    return (block.x_pos - char.x_size < char.x_pos < block.x_pos + block.x_size
-    and block.y_pos < char.y_pos < block.y_pos + block.y_size)
 
 
 #####################
@@ -111,7 +118,6 @@ DISPLAYSURF = pygame.display.set_mode((SURFWIDTH, SURFHEIGHT))
 pygame.display.set_caption("My first (working?) game")
 
 t = 0
-level = 0
 
 while True:
 
@@ -132,19 +138,18 @@ while True:
         char.x_v0 = -20
 
     if keys[K_a]:
-        char.y_a = - 5   
+        char.y_a = - 2
 
     if keys[K_d]:
-        char.y_a = 5
+        char.y_a = 2
 
     # UPDATE POS
     x_old_pos = char.x_pos
     y_old_pos = char.y_pos
 
-
     if char.x_pos <= X_GROUND:
         char.x_pos = 0.5 * char.x_a * t ** 2 + char.x_v0 * t + char.x_pos0
-        t += 0.5
+        t += 0.20
     if char.x_pos > X_GROUND:
         char.x_pos = X_GROUND
 
@@ -154,10 +159,17 @@ while True:
     if char.y_a > 0 and char.y_pos < SURFWIDTH - TILESIZE:
         char.y_pos += char.y_a * 1
 
-    if collides_hor(char, block):
-        char.y_pos = y_old_pos
+    if char.collides(block):
+        if char.is_above(block): # Can't go down
+            char.x_pos = block.x_pos - char.x_size
+            char.is_on_block = True
+        elif char.is_under(block): # Can't go up
+            char.x_pos = x_old_pos
+        else:
+            char.y_pos = y_old_pos
 
-    if collides_vert(char, block) and
+
+
 
     ### DRAW ###
     for x in range(MAPHEIGHT):
