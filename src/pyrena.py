@@ -52,8 +52,6 @@ class Block:
     y_size = 4 * c.TILESIZE
 
 
-char = Character()
-block = Block()
 
 
 #####################
@@ -65,6 +63,9 @@ def main():
 
     DISPLAYSURF = pygame.display.set_mode((c.SURFWIDTH, c.SURFHEIGHT))
     pygame.display.set_caption("My first (working?) game")
+
+    char = Character()
+    block = Block()
 
     t = 0
 
