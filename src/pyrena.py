@@ -1,69 +1,18 @@
 import pygame, sys
 import importlib
+import constants as c
 
 from pygame.locals import *
 
-###############
-##### MAP #####
-###############
-
-GREY = (50, 50, 50)
-BROWN = (153, 76, 0)
-BLUE = (0, 200, 255)
-RED = (200, 0, 0)
-
-
-GROUND = 0
-BLOCK = 1
-SKY = 2
-CHAR = 3
-
-color = {
-    GROUND : GREY,
-    BLOCK : GREY,
-    SKY : BLUE,
-    CHAR : RED
-}
-
-tilemap = [
-    [SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [SKY,    SKY,    GROUND, GROUND, GROUND, GROUND, SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY,    SKY],
-    [GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND],
-    [GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND, GROUND],
-]
-
-TILESIZE = 50
-MAPWIDTH = 20
-MAPHEIGHT = 12
-
-X_GROUND = (MAPWIDTH * TILESIZE) // 2 - TILESIZE
-X_BLOCK = 6 * TILESIZE
-Y_BEGIN_BLOCK = 2 * TILESIZE
-Y_END_BLOCK = 6 * TILESIZE
-
-SURFWIDTH = MAPWIDTH * TILESIZE
-SURFHEIGHT = MAPHEIGHT * TILESIZE
-
-
-g = 1
-
 class Character:
-    x_a = g
+    x_a = c.g
     y_a = 0
 
     x_v = 0
     y_v = 0
 
-    x_pos = X_GROUND
-    y_pos = 10 * TILESIZE
+    x_pos = c.X_GROUND
+    y_pos = 10 * c.TILESIZE
 
     x_v0 = 0
     y_v0 = 0
@@ -71,8 +20,8 @@ class Character:
     x_pos0 = x_pos
     y_pos0 = y_pos
 
-    x_size = 1 * TILESIZE
-    y_size = 1 * TILESIZE
+    x_size = 1 * c.TILESIZE
+    y_size = 1 * c.TILESIZE
 
     is_on_block = False
 
@@ -96,11 +45,11 @@ class Character:
 
 
 class Block:
-    x_pos = 7 * TILESIZE
-    y_pos =  2 * TILESIZE
+    x_pos = 7 * c.TILESIZE
+    y_pos =  2 * c.TILESIZE
 
-    x_size = 1 * TILESIZE
-    y_size = 4 * TILESIZE
+    x_size = 1 * c.TILESIZE
+    y_size = 4 * c.TILESIZE
 
 
 char = Character()
@@ -113,8 +62,7 @@ block = Block()
 
 pygame.init()
 
-
-DISPLAYSURF = pygame.display.set_mode((SURFWIDTH, SURFHEIGHT))
+DISPLAYSURF = pygame.display.set_mode((c.SURFWIDTH, c.SURFHEIGHT))
 pygame.display.set_caption("My first (working?) game")
 
 t = 0
@@ -133,7 +81,7 @@ while True:
     # UPDATE ACCELERATION
     keys = pygame.key.get_pressed()
 
-    if keys[K_SPACE] and char.x_pos == X_GROUND:
+    if keys[K_SPACE] and char.x_pos == c.X_GROUND:
         t = 1
         char.x_v0 = -20
 
@@ -147,16 +95,16 @@ while True:
     x_old_pos = char.x_pos
     y_old_pos = char.y_pos
 
-    if char.x_pos <= X_GROUND:
+    if char.x_pos <= c.X_GROUND:
         char.x_pos = 0.5 * char.x_a * t ** 2 + char.x_v0 * t + char.x_pos0
         t += 0.20
-    if char.x_pos > X_GROUND:
-        char.x_pos = X_GROUND
+    if char.x_pos > c.X_GROUND:
+        char.x_pos = c.X_GROUND
 
     if char.y_a < 0 and char.y_pos > 0:
         char.y_pos += char.y_a * 1
 
-    if char.y_a > 0 and char.y_pos < SURFWIDTH - TILESIZE:
+    if char.y_a > 0 and char.y_pos < c.SURFWIDTH - c.TILESIZE:
         char.y_pos += char.y_a * 1
 
     if char.collides(block):
@@ -168,14 +116,11 @@ while True:
         else:
             char.y_pos = y_old_pos
 
-
-
-
     ### DRAW ###
-    for x in range(MAPHEIGHT):
-        for y in range(MAPWIDTH):
-            pygame.draw.rect(DISPLAYSURF, color[tilemap[x][y]], (y * TILESIZE, x * TILESIZE, TILESIZE, TILESIZE))
+    for x in range(c.MAPHEIGHT):
+        for y in range(c.MAPWIDTH):
+            pygame.draw.rect(DISPLAYSURF, c.color[c.tilemap[x][y]], (y * c.TILESIZE, x * c.TILESIZE, c.TILESIZE, c.TILESIZE))
 
-    pygame.draw.rect(DISPLAYSURF, RED, (char.y_pos, char.x_pos, TILESIZE, TILESIZE))
+    pygame.draw.rect(DISPLAYSURF, c.RED, (char.y_pos, char.x_pos, c.TILESIZE, c.TILESIZE))
 
     pygame.display.update()
